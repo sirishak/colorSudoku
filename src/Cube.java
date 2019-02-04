@@ -10,18 +10,12 @@ public class Cube {
         int i=0;
         for(int k=0 ; k< rootFaces.length; k++){
                 rootFace = rootFaces[k];
-                faces.add(rootFace); //wrob
-                ++i;
-                faces.add(rotate(faces.get(i-1))); //robw
-            ++i;
-                faces.add(rotate(faces.get(i-1))); //obwr
-            ++i;
-                faces.add(rotate(faces.get(i-1))); //bwro
-            ++i;
-                faces.add(top(faces.get(k))); //bowr
-            ++i;
-                faces.add(bottom(faces.get(k))); //obrw i=6
-            ++i;
+                faces.add(rootFace); ++i;
+                faces.add(rotate(faces.get(i-1))); ++i;
+                faces.add(rotate(faces.get(i-1))); ++i;
+                faces.add(rotate(faces.get(i-1))); ++i;
+                faces.add(top(faces.get(k))); ++i;
+                faces.add(bottom(faces.get(k))); ++i;
         }
     }
 

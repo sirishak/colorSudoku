@@ -15,7 +15,7 @@ public class Main {
             if (isDone) {
                 System.out.println("\n\nFOUND COMBINATION!");
                 printBoard(board);
-                //break;
+                //break; -> uncomment to print only one combination
             } else {
                 Cube cbe = cubes.removeFirst();
                 cubes.addLast(cbe);
@@ -27,15 +27,17 @@ public class Main {
 
     private static Boolean findComb(Board board, int row, int col, List<Cube> cubes, boolean[] cubeUsed) {
 
+        //base case
         if (row >= board.rowSize || col >= board.colSize || row < 0 || col < 0) {
-            //exit
             return null;
         }
 
+        //cube already placed
         if (board.faces[row][col] != null) {
             return true;
         }
 
+        //no cube placed
         for (int i = 0; i < cubes.size(); i++) {
             if (!cubeUsed[i]) {
                 boolean faceFound = false;
