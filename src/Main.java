@@ -5,12 +5,13 @@ import java.util.List;
 public class Main {
 
     public static void main(String args[]) {
+
         Board board = new Board();
 
         LinkedList<Cube> cubes = initializeInputs();
 
         for (int i = 0; i < cubes.size(); i++) {
-            boolean[] cubeUsed = new boolean[9];
+            boolean[] cubeUsed = new boolean[cubes.size()];
             boolean isDone = findComb(board, 0, 0, cubes, cubeUsed);
             if (isDone) {
                 System.out.println("\n\nFOUND COMBINATION!");
@@ -21,7 +22,6 @@ public class Main {
                 cubes.addLast(cbe);
             }
         }
-
         System.out.println("NO COMBINATION!");
     }
 
@@ -38,48 +38,35 @@ public class Main {
         }
 
         //no cube placed
-        for (int i = 0; i < cubes.size(); i++) {
-            if (!cubeUsed[i]) {
+        for (int cubeIndex = 0; cubeIndex < cubes.size(); cubeIndex++) {
+
+            if (!cubeUsed[cubeIndex]) {
                 boolean faceFound = false;
-                for (int k = 0; k < cubes.get(i).faces.size(); k++) {
-                    Face face = cubes.get(i).faces.get(k);
+                for (Face face: cubes.get(cubeIndex).faces) {
+
                     board.faces[row][col] = face;
 
                     if (board.isValid()) {
-                        cubeUsed[i] = true;
-                        Boolean rightCombWorked = findComb(board, row, col + 1, cubes, cubeUsed);
 
+                        cubeUsed[cubeIndex] = true;
+
+                        Boolean rightCombWorked = findComb(board, row, col + 1, cubes, cubeUsed);
                         if (rightCombWorked != null && !rightCombWorked) {
-                            cubeUsed[i] = false;
+                            cubeUsed[cubeIndex] = false;
                             continue;
                         }
 
                         Boolean downCombWorked = findComb(board, row + 1, col, cubes, cubeUsed);
-
-                        /**
-                         * right = null, down = null -> success
-                         * right = null, down = true -> success
-                         * right = null, down = false -> fail
-                         * right = true, down = null -> success
-                         * right = true, down = true -> success
-                         * right = true, down = false -> fail
-                         * right = false, down = null -> fail
-                         * right = false, down = true -> fail
-                         * right = false, down = false -> fail
-                         */
-
-                        if ((rightCombWorked != null && !rightCombWorked) || (downCombWorked != null
-                                && !downCombWorked)) {
-                            cubeUsed[i] = false;
+                        if (downCombWorked != null && !downCombWorked) {
+                            cubeUsed[cubeIndex] = false;
                             continue;
                         }
 
                         faceFound = true;
                         break;
-
                     }
                 }
-                if (faceFound == true) {
+                if (faceFound) {
                     return true;
                 } else {
                     board.faces[row][col] = null;
