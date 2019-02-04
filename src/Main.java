@@ -4,25 +4,45 @@ import java.util.List;
 
 public class Main {
 
-    public static void main(String args[]) {
+    // Apparently half million possible solutions. Not printing them all!
+    public static final int NUM_SOLUTIONS_TO_PRINT = 5;
+    public static int CURR_SOL = 0;
 
-        Board board = new Board();
+    public static void main(String args[]) {
 
         LinkedList<Cube> cubes = initializeInputs();
 
-        for (int i = 0; i < cubes.size(); i++) {
-            boolean[] cubeUsed = new boolean[cubes.size()];
-            boolean isDone = findComb(board, 0, 0, cubes, cubeUsed);
-            if (isDone) {
-                System.out.println("\n\nFOUND COMBINATION!");
-                printBoard(board);
-                //break; -> uncomment to print only one combination
-            } else {
-                Cube cbe = cubes.removeFirst();
-                cubes.addLast(cbe);
-            }
-        }
+        runProgram(cubes, 0, 0);
+
         System.out.println("NO COMBINATION!");
+    }
+
+    private static void runProgram(LinkedList<Cube> cubes, int cubeIndex, int orientationIndex) {
+
+        if (cubeIndex < 0 || cubeIndex >= cubes.size() || orientationIndex < 0 || orientationIndex >= cubes.get(0).faces
+                .size() || CURR_SOL >= NUM_SOLUTIONS_TO_PRINT) {
+            return;
+        }
+
+        //Flip cube by either rotating cube or rotating current root face
+        LinkedList<Cube> cubesCopy = new LinkedList<Cube>(cubes);
+        Cube cubeRemoved = cubesCopy.remove(cubeIndex);
+        Cube orientCube = new Cube(cubeRemoved.faces.get(orientationIndex));
+        cubesCopy.add(cubeIndex, orientCube);
+
+        Board board = new Board();
+        boolean[] cubeUsed = new boolean[cubes.size()];
+        boolean isDone = findComb(board, 0, 0, cubesCopy, cubeUsed);
+
+        if (isDone) {
+            CURR_SOL++;
+            System.out.println("\n\nFOUND COMBINATION #" + CURR_SOL);
+            printBoard(board);
+            runProgram(cubesCopy, cubeIndex, orientationIndex + 1);
+            runProgram(cubesCopy, cubeIndex + 1, orientationIndex);
+        }
+        return;
+
     }
 
     private static Boolean findComb(Board board, int row, int col, List<Cube> cubes, boolean[] cubeUsed) {
@@ -42,7 +62,7 @@ public class Main {
 
             if (!cubeUsed[cubeIndex]) {
                 boolean faceFound = false;
-                for (Face face: cubes.get(cubeIndex).faces) {
+                for (Face face : cubes.get(cubeIndex).faces) {
 
                     board.faces[row][col] = face;
 
