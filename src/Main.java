@@ -57,7 +57,6 @@ public class Main {
         for (int cubeIndex = 0; cubeIndex < cubes.size(); cubeIndex++) {
 
             if (!cubeUsed[cubeIndex]) {
-                boolean faceFound = false;
                 for (Face face : cubes.get(cubeIndex).faces) {
 
                     board.faces[row][col] = face;
@@ -78,14 +77,11 @@ public class Main {
                             continue;
                         }
 
-                        faceFound = true;
-                        break;
+                        return true;
+
+                    } else {
+                        board.faces[row][col] = null;
                     }
-                }
-                if (faceFound) {
-                    return true;
-                } else {
-                    board.faces[row][col] = null;
                 }
             }
         }
