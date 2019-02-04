@@ -9,12 +9,8 @@ public class Main {
     public static int CURR_SOL = 0;
 
     public static void main(String args[]) {
-
         LinkedList<Cube> cubes = initializeInputs();
-
         runProgram(cubes, 0, 0);
-
-        System.out.println("NO COMBINATION!");
     }
 
     private static void runProgram(LinkedList<Cube> cubes, int cubeIndex, int orientationIndex) {
